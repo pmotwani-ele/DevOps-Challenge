@@ -3,8 +3,8 @@ from kafka import KafkaConsumer
 import json
 
 
-kafka_broker = os.environ.get("KAFKA_BROKER_URL", "localhost:9093")
-kafka_topic = os.environ.get("KAFKA_TOPIC", "posts")
+kafka_broker = os.environ.get("KAFKA_BROKER_URL", "localhost:9092")
+kafka_topic = os.environ.get("KAFKA_TOPIC", "test")
 
 consumer = KafkaConsumer(
     kafka_topic,
