@@ -1,4 +1,26 @@
 kafka:
+  version: "3.6.0"
+  brokers: 3
+  storage:
+    size: 10Gi
+    class: standard
+  listeners:
+    - name: plain
+      port: 9092
+      type: internal
+      tls: false
+zookeeper:
+  replicas: 3
+  storage:
+    size: 10Gi
+    class: standard
+topic:
+  name: posts
+  partitions: 3
+  replicas: 2
+  retention: 604800000
+
+kafka:
   replicas: 2
   listeners:
     - name: plain
