@@ -8,6 +8,6 @@ spec:
   partitions: {{ .Values.topic.partitions }}
   replicas: {{ .Values.topic.replicas }}
   config:
-    retention.ms: {{ .Values.topic.retention }}
-    segment.bytes: 1073741824
-    cleanup.policy: delete
+    retention.ms: {{ .Values.topic.retention.ms }}
+    segment.bytes: {{ .Values.topic.config.segment.bytes }}
+    cleanup.policy: {{ .Values.topic.config.cleanup.policy }}

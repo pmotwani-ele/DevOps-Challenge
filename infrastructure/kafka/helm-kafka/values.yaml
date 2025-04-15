@@ -1,32 +1,47 @@
+# Kafka Configuration
 kafka:
   version: "3.6.0"
-  brokers: 3
+  replicas: 2  # Minimum 2 brokers for high availability
   storage:
     size: 10Gi
-    class: standard
-  listeners:
-    - name: plain
-      port: 9092
-      type: internal
-      tls: false
-zookeeper:
-  replicas: 3
-  storage:
-    size: 10Gi
-    class: standard
-topic:
-  name: posts
-  partitions: 3
-  replicas: 2
-  retention: 604800000
-
-kafka:
-  replicas: 2
+    class: standard  # Ensure this class exists in your cluster or use "ephemeral"
   listeners:
     - name: plain
       port: 9092
       type: internal
       tls: false
   config:
-    num.partitions: 3
-    default.replication.factor: 2
+    num.partitions: 2        # We'll use 3 partitions for the topic to allow scaling
+    default.replication.factor: 2  # At least 2 for redundancy
+    offsets.topic.replication.factor: 2  # Match replication factor
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 1
+    limits:
+      memory: 512Mi
+      cpu: 2
+
+# Zookeeper Configuration
+zookeeper:
+  replicas: 1  # Recommended: Use 3 Zookeeper instances for quorum
+  storage:
+    size: 10Gi
+    class: standard
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 1
+    limits:
+      memory: 512Mi
+      cpu: 2
+
+# Kafka Topic Configuration
+topic:
+  name: posts
+  partitions: 2  # More partitions allow better scalability and parallelism
+  replicas: 2  # Match Kafka replication factor
+  retention.ms: 604800000  # Retain messages for 7 days
+  config:
+    segment.bytes: 1073741824  # Segment size for log files
+    cleanup.policy: delete     # Clean up old messages after retention period

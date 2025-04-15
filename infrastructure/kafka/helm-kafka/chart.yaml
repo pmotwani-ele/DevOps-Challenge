@@ -1,8 +1,7 @@
 apiVersion: v2
-name: kafka-helm
+name: kafka-cluster
 version: 0.1.0
-description: A Helm chart to deploy Kafka cluster with Strimzi
-
+description: A Helm chart for Apache Kafka with Strimzi support
 dependencies:
   - name: strimzi-kafka-operator
     version: 0.41.0
