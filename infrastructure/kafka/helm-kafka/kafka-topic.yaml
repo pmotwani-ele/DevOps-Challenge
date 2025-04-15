@@ -1,0 +1,13 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: {{ .Values.topic.name }}
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: {{ .Values.topic.partitions }}
+  replicas: {{ .Values.topic.replicas }}
+  config:
+    retention.ms: {{ .Values.topic.retention }}
+    segment.bytes: 1073741824
+    cleanup.policy: delete
