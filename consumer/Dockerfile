@@ -1,18 +1,15 @@
-FROM python:3.8-slim
+FROM python:3.10-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# Create a non-root user
-RUN adduser --disabled-password --gecos '' appuser
-
+# Set working directory
 WORKDIR /app
-COPY consumer.py /app/consumer.py
 
 # Install dependencies
-RUN pip install --no-cache-dir kafka-python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Change to non-root user
-USER appuser
+# Copy source code
+COPY consumer.py .
 
+
+# Run the app
 CMD ["python", "consumer.py"]

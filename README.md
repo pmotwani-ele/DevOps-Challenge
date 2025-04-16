@@ -1,44 +1,111 @@
-# Senior DevOps Engineer Technical Challenge
+# 🛠️ Kafka DevOps Setup – Infrastructure Documentation
+
+This repository sets up a Kafka-based message-driven architecture using:
+
+- Apache Kafka cluster via Helm
+- Producer and Consumer Python applications
+- Kubernetes manifests and Helm-based IaC
+- Local development stack with Docker Compose
+
+---
+
+## ☁️ Kafka Cluster Setup (Helm)
+
+### ✅ Kafka Version
+
+Kafka is installed via the official [Strimzi Helm Chart](https://strimzi.io/).  
+Version is managed through the `values.yaml` file:
+
+kafka:
+  version: 3.8.1
+
+###  To upgrade Kafka
+
+  Update the version field in values.yaml.
+
+  Re-run the Helm upgrade command:
+
+helm upgrade kafka-cluster strimzi/strimzi-kafka-operator -f values.yaml -n kafka
 
 
-## Scenario
-The product the engineering team is working on will use an event-driven architecture based on kafka and you are responsible for the infrastructure. The backend team has 2 microservices: `consumer` and `producer` which consist of a python application that reads and writes messages to kafka. The team has asked you to set up a kafka cluster and deploy the microservices to it.
-The system should be able to handle a large volume of data and ensure high availability.
+
+### Scaling Kafka Brokers
+
+The number of Kafka brokers (replicas) is configured in values.yaml:
+
+  kafka:
+    replicas: 2
+
+TO SCALE:
+
+Change the replicas value.
+
+Re-run the Helm upgrade command above.
+
+Kafka will gracefully roll the brokers in and out.
+
+### Why 2 brokers?
+
+Ensures availability during single node failure.
+
+With a replication factor of 2, messages are fault-tolerant.
+
+✅ Topic Strategy :
+
+  The posts topic is defined with:
+
+    partitions: 3
+    replicas: 2
+
+### Reasoning for Topic Strategy
+
+    3 partitions: enables concurrent message consumption across 3 consumers for better throughput.
+
+    2 replicas: guarantees data availability even if one broker goes down.
+
+### Helm Installation (Centralized)
+
+helm repo add strimzi https://strimzi.io/charts/
+helm repo update
+helm install strimzi-kafka-operator strimzi/strimzi-kafka-operator -n kafka --create-namespace
+
+Deploy Kafka Cluster
+
+helm install kafka-cluster ./charts/kafka-cluster -n kafka -f values.yaml
 
 
-## Challenge Overview
 
-## Instructions
+### Containerization best practices
+    Dockerfiles use minimal base images (python:3.9-slim)
 
-1. Kafka Cluster:
+    .dockerignore excludes unused build files
 
-- Set up an Apache Kafka cluster with at least two brokers.
-- Define a topic called `posts` and propose a partition and replication strategy. Explain your reasoning.
-- Your setup should also help the backend developers to test their python application locally.
+    Environment variables drive dynamic configs (Kafka brokers, topic)
 
-2. Containerization & Deployment:
-- The python applications have an initial docker container, make some improvements to it using best practices for containerization.
-- Deploy the applications to your Kubernetes cluster.
+    📜 Helm Installation (Centralized)
+    Add Strimzi Helm Repo:
 
-3. IaC:
-- Set your infrastructure as code using best practices. Think of how would you upgrade the kafka version, add more brokers, manage topics, etc.
+    helm repo add strimzi https://strimzi.io/charts/
+    helm repo update
 
-4. Observability (Optional):
-- Set up (or explain how to set) monitoring and alerting for your Kafka cluster.
 
-Notes:
-- We recommend you to use minikube, but you can also use kind, aks, or any other provider of your choice.
-- Ask questions if something is unclear, we are here to help :)
-- It is okay to make some assumptions but document and communicate them.
-- Your focus should not be on the python application, but on its infrastructure.
+    bash
+    Copy
+    Edit
+    helm install strimzi-kafka-operator strimzi/strimzi-kafka-operator -n kafka --create-namespace
+    Deploy the cluster:
 
-## Evaluation Criteria:
-- Containerization and deployment
-- Automation degree of the infrastructure
-- Correct configuration of Kafka
-- Accounting for availability, scalability, and fault tolerance
+    bash
+    Copy
+    Edit
+    helm install kafka-cluster ./charts/kafka-cluster -n kafka -f values.yaml
+    Replace ./charts/kafka-cluster with the path to your Helm chart or use Helm template if you don't have a custom one.
 
-## Deliverables:
-- Code
-- Documentation
-- Showcase your work in a live demo
+    🔥 Optional: Observability
+    To monitor Kafka:
+
+    Use Prometheus + Grafana stack.
+
+    Strimzi exposes metrics via Kafka metrics exporter.
+
+    Install via Helm or customize Grafana dashboards from Strimzi docs.

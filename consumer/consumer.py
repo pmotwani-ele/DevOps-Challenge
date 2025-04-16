@@ -4,7 +4,7 @@ import json
 
 
 kafka_broker = os.environ.get("KAFKA_BROKER_URL", "localhost:9092")
-kafka_topic = os.environ.get("KAFKA_TOPIC", "test")
+kafka_topic = os.environ.get("KAFKA_TOPIC", "posts")
 
 consumer = KafkaConsumer(
     kafka_topic,

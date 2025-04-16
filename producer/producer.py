@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 
 kafka_broker = os.environ.get("KAFKA_BROKER_URL", "localhost:9092")
-kafka_topic = os.environ.get("KAFKA_TOPIC", "test")
+kafka_topic = os.environ.get("KAFKA_TOPIC", "posts")
 
 producer = KafkaProducer(bootstrap_servers=[kafka_broker], value_serializer=lambda v: json.dumps(v).encode("utf-8"))
 for i in range(5):
