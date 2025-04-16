@@ -147,9 +147,14 @@ Access http://127.0.0.1:9090/ locally to access prometheus
 
 ## what is not done in the favor of time and can be improved in this setup ####
 
-- Use Ingress load balancer for Consumer and producer backend service for better availability.
-- can use helm charts and not deployment manifests file for building the service ( Better packaging as kafka)
-- CICD ( deployment) pipelines are missing keeping timelines in mind , in real time can create a CI pipeline for deployment and branching etc
-- Can use something like Karpenter or Autoscaler for node scaling etc if real time environment on cloud environment , similarly for larger and complicate environments , can use combination of VPA and HPA for scaling ( here was minikube)
-- Similarly for Kafka , we can use managed Kafka service like AWS MSK if real time environment in kafka for better scalabilitiy , management and less overhead
-- for IAC , I have used Helm mostly as was an easy choice here to use the external charts , in real time would recommend creating our own helm charts or we can also  use Terraform/terragrunt ( combination of both ), Templating was the motive here
+Consider using an Ingress Load Balancer for the consumer and producer backend services to improve availability and manageability.
+
+Similar to Kafka, Helm charts can also be utilized for deploying backend services, which helps standardize and simplify deployments.
+
+CI/CD pipelines for deployment and PR reviews are currently missing. Given project timelines, this was deprioritized, but in a real-world scenario, implementing automated CI pipelines would be essential.
+
+For scaling infrastructure in cloud environments, tools like Karpenter or the Cluster Autoscaler can be used for dynamic node provisioning. In more complex or production-scale environments, a combination of VPA (Vertical Pod Autoscaler) and HPA (Horizontal Pod Autoscaler) would be appropriate. (This setup was on Minikube, so scaling was limited.)
+
+For Kafka, a managed service like AWS MSK can be leveraged in real-time environments to enhance scalability, simplify management, and reduce operational overhead.
+
+As for Infrastructure as Code (IaC), Helm was primarily used here due to its simplicity and the availability of external charts. However, in production, creating custom Helm charts or using tools like Terraform or Terragrunt (or a combination) is recommended. The goal was to focus on templating and automation.
