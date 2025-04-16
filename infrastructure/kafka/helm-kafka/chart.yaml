@@ -1,8 +1,0 @@
-apiVersion: v2
-name: kafka-cluster
-version: 0.1.0
-description: A Helm chart for Apache Kafka with Strimzi support
-dependencies:
-  - name: strimzi-kafka-operator
-    version: 0.41.0
-    repository: https://strimzi.io/charts/

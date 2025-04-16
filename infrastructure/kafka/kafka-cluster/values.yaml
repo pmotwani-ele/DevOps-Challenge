@@ -1,0 +1,18 @@
+kafka:
+  replicas: 2
+  image: confluentinc/cp-kafka:7.3.0
+  port: 9092
+  config:
+    log.retention.hours: 168
+    num.partitions: 3
+    default.replication.factor: 2  # Ensure this is properly defined
+
+zookeeper:
+  replicas: 1
+  image: confluentinc/cp-zookeeper:7.3.0
+  port: 2181
+
+topic:
+  name: posts
+  partitions: 3
+  replicas: 2

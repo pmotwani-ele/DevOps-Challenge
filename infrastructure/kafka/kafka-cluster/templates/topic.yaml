@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-topic
+spec:
+  template:
+    spec:
+      containers:
+        - name: kafka-create-topic
+          image: bitnami/kafka:3
+          command:
+            - sh
+            - -c
+            - |
+              /opt/bitnami/kafka/bin/kafka-topics.sh \
+              --create \
+              --bootstrap-server kafka:9092 \
+              --replication-factor {{ .Values.topic.replicas }} \
+              --partitions {{ .Values.topic.partitions }} \
+              --topic {{ .Values.topic.name }}
+      restartPolicy: OnFailure
