@@ -5,12 +5,16 @@ kafka:
   config:
     log.retention.hours: 168
     num.partitions: 3
-    default.replication.factor: 2  # Ensure this is properly defined
+    default.replication.factor: 2
+  metrics:
+    enabled: true
 
 zookeeper:
   replicas: 1
   image: confluentinc/cp-zookeeper:7.3.0
   port: 2181
+  metrics:
+    enabled: true
 
 topic:
   name: posts

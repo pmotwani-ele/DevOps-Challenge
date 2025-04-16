@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+  namespace: consumer-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-consumer
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+        - name: kafka-consumer
+          image: pmotwani575/kafka-consumer:latest  
+          env:
+            - name: KAFKA_BROKER_URL
+              value: "kafka-cluster-kafka-bootstrap:9092"  # Kafka broker service in the Kafka namespace
+            - name: KAFKA_TOPIC
+              value: "posts"  # Kafka topic
+          ports:
+            - containerPort: 8081
